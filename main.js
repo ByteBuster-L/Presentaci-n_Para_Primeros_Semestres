@@ -226,7 +226,7 @@ function manejarClick(casilla) {
   if (casilla.textContent || turno !== 'humano') return;
 
   casillaPendiente = casilla;
-  mostrarPreguntaQuiz();
+  colocarFichaHumano();
 }
 
 function mostrarPreguntaQuiz() {
