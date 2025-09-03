@@ -10,7 +10,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: #F8F4ED;
 }
 
 #board {
@@ -151,9 +151,8 @@ main {
     left: 0;
 }
 
-
 .footer-content {
-    background-color: #5F1B2D;
+    background-color: #D9D3CC;
     padding: 100px 40px 40px;
     width: 100%;
     display: flex;
@@ -166,7 +165,7 @@ main {
 }
 
 .footer-main h2 {
-    color: #ffffff;
+    color: #81253d;
     font-size: 1.6rem;
 }
 
@@ -176,68 +175,12 @@ main {
     line-height: 1.3rem;
 }
 
-.escudo{
-    width: 100%;
-    height: auto;
-}
-
-.social-links {
-    margin: 15px 0;
-    display: flex;
-    gap: 8px;
-}
-
-.social-links a {
-    padding: 5px;
-    background-color: #dbd8e3;
-    border-radius: 5px;
-    transition: 0.5s;
-    text-decoration: none;
-}
-
-.social-links a:hover {
-    opacity: 0.7;
-}
-
-.social-links a i {
-    margin: 2px;
-    font-size: 1.1rem;
-    color: #201e1e;
-}
-
-.links {
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    margin: 40px 20px;
-}
-
-.links p {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #C79B66;
-}
-
-.links a {
-    font-size: 0.8rem;
-    text-decoration: none;
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #dbd8e3;
-    transition: 0.5s all;
-}
-
-.links a:hover {
-    color: #C79B66;
-}
-
 span {
     color: #C79B66;
 }
 
 .footer-content {
-    background-color: #5F1B2D;
+    background-color: #D9D3CC;
     padding: 100px 40px 40px;
     width: 100%;
     display: flex;
@@ -250,20 +193,14 @@ span {
     margin: 50px 20px;
     min-width: 220px;
     flex: 1 1 220px;
-}
-
-.links {
     display: flex;
     flex-direction: column;
-    width: 200px;
-    margin: 40px 20px;
-    min-width: 180px;
-    flex: 1 1 180px;
+    align-items: center;
 }
 
 /*MENÚ */
 .navs {
-    background-color: #5F1B2D;
+    background-color: #D9D3CC;
     color: white;
     position: fixed;
     width: 100vw;
@@ -280,7 +217,7 @@ span {
     width: 100vw;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 10px 20px;
 }
 
@@ -322,13 +259,6 @@ span {
     border-radius: 4px;
 }
 
-.register,
-.login {
-    margin-left: 18px;
-    color: #C19E74;
-    text-decoration: none;
-    font-size: 1.05rem;
-}
 /* Corrección para el main */
 main {
     width: 100%;
@@ -391,12 +321,6 @@ main {
     width: 100%;
     padding: 10px 0;
   }
-
-  .register, .login {
-    margin: 10px 0;
-    width: 100%;
-    text-align: center;
-  }
 }
 
 /* TABLERO Y QUIZ RESPONSIVE */
@@ -434,26 +358,7 @@ main {
     gap: 20px;
   }
 
-  .footer-main, .links {
-    width: 100%;
-    text-align: center;
-    margin: 20px 0;
-  }
-
-  .social-links {
+  .footer-main{
     justify-content: center;
-    width: 100%;
-  }
-
-  .footer-main h2 {
-    font-size: 1.3rem;
-  }
-
-  .links p {
-    font-size: 1.1rem;
-  }
-
-  .links a {
-    font-size: 0.9rem;
   }
 }
