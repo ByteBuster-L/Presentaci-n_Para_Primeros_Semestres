@@ -5,12 +5,12 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: Helvetica;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  background-color: #F8F4ED;
+  background-color: #F0EFE9;
 }
 
 #board {
@@ -170,9 +170,10 @@ main {
 }
 
 .footer-main p {
-    color: #ffffff;
-    font-size: 0.8rem;
+    color: #555555;
+    font-size: 1rem;
     line-height: 1.3rem;
+    margin-bottom: 15px;
 }
 
 span {
@@ -248,7 +249,7 @@ span {
 }
 
 .linksheader a {
-    color: #C19E74;
+    color: #8B2F3D;
     text-decoration: none;
     padding: 10px;
     font-size: 1.5rem;
@@ -257,6 +258,48 @@ span {
 .linksheader li:hover {
     background-color: #81253d;
     border-radius: 4px;
+}
+
+.linksheader a:hover {
+    color: #C19E74;;
+}
+
+/* Contenedor principal de los enlaces */
+.footer-links {
+    margin-top: 20px; /* Espacio entre el copyright y los enlaces */
+    text-align: center; /* Centra los enlaces */
+}
+
+/* Estilo para cada enlace (el conjunto de icono + texto) */
+.footer-links a {
+    color: #8B2F3D; /* Color borgoña/guinda que recomendamos */
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    margin: 0 15px; /* Espacio horizontal entre cada enlace */
+    font-size: 24px;
+    font-weight: 500;
+    
+    /* Pequeño truco para alinear perfectamente icono y texto */
+    display: inline-flex;
+    align-items: center;
+
+    /* Transición suave para el efecto hover */
+    transition: all 0.3s ease;
+}
+
+/* Estilo específico para los iconos */
+.footer-links a i {
+    font-size: 32px; /* Hacemos el icono un poco más grande que el texto */
+    margin-right: 8px; /* Espacio entre el icono y el texto */
+}
+
+/* Efecto al pasar el ratón por encima de los enlaces */
+.footer-links a:hover {
+    color: #B74D5A; /* Un tono de borgoña más claro para el hover */
+    transform: translateY(-3px); /* Eleva ligeramente el enlace para un efecto dinámico */
+}
+
+.footerComico p{
+  font-size: 48px;
 }
 
 /* Corrección para el main */

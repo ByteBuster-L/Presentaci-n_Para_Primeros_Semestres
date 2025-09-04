@@ -55,33 +55,6 @@ export class Bot {
     return masCercanos.filter(mov => !ambasPosiciones.includes(mov));
   };
 
-  seleccionarBloqueoOGanada({ movimientoParaBloquear, movimientoParaGanar, humano, bot }) {
-    const todos = humano.concat(bot);
-    const estadoHumano = winnerConditional.filter(arrayWin => hasTwoSimilarElements(arrayWin, humano));
-    const estadoBot = winnerConditional.filter(arrayWin => hasTwoSimilarElements(arrayWin, bot));
-    const esquinas = [1, 3, 7, 9];
-    let resultado = movimientoParaGanar;
-    if (estadoBot[0] && movimientoParaGanar[0]) {
-      resultado = movimientoParaGanar;
-    } else if (estadoHumano[0] && movimientoParaBloquear[0]) {
-      resultado = movimientoParaBloquear;
-    }
-
-    const excepcionGanada = [...winnerConditional].splice(6, 9);
-    const excepcionHumano = excepcionGanada.filter(array => hasTwoSimilarElements(array, humano));
-
-    if (hasTwoSimilarElements(esquinas, humano)
-      && (!estadoBot[0])
-      && this.difficulty == GAME_MODE.impossible
-      && excepcionHumano[0]) {
-      resultado = movimientoParaGanar;
-    } else if ((!estadoHumano[0] && !estadoBot[0]
-      && this.difficulty == GAME_MODE.impossible)) {
-      resultado = [this.calcularEsquinaAleatoria(todos)];
-    }
-    return movimientoParaGanar[0] ? resultado : movimientoParaBloquear;
-  };
-
   seleccionarEsquina(arreglo) {
     const esquinasYCentro = [1, 3, 7, 9, 5];
     const esquinaFiltrada = esquinasYCentro.filter(el => arreglo.includes(el))[0];
@@ -104,10 +77,10 @@ export class Bot {
     return disponibles[indiceAleatorio];
   };
 
-  decidirMovimiento(movsHumano, movsBot) {
+decidirMovimiento(movsHumano, movsBot) {
     const todosMovs = movsHumano.concat(movsBot);
 
-    // 1. Intentar ganar
+    // 1. Intentar ganar (Prioridad máxima)
     const posiblesGanadas = this.calcularMovimiento(movsBot, movsHumano);
     const intentoGanar = this.intentarGanar(posiblesGanadas, movsBot);
     const movGanar = this.calcularCasillaVacia(intentoGanar, todosMovs);
@@ -116,7 +89,7 @@ export class Bot {
         return movGanar[0];
     }
 
-    // 2. Bloquear al humano si va a ganar
+    // 2. Bloquear al humano si va a ganar (Segunda prioridad)
     const posiblesBloqueos = this.calcularMovimiento(movsHumano, movsBot);
     const intentoBloqueo = this.intentarGanar(posiblesBloqueos, movsHumano);
     const movBloqueo = this.calcularCasillaVacia(intentoBloqueo, todosMovs);
@@ -125,19 +98,28 @@ export class Bot {
         return movBloqueo[0];
     }
 
-    // 5. Tomar el centro si está libre
+    // 3. NUEVO: Crear un fork (Ataque en L) si es posible
+    if (this.difficulty === GAME_MODE.impossible) { // Solo para la dificultad más alta
+        const forkMove = this.encontrarFork(movsBot, movsHumano, todosMovs);
+        if (forkMove !== null && forkMove !== undefined) {
+            console.log("Bot crea un fork (ataque L) en:", forkMove);
+            return forkMove;
+        }
+    }
+    
+    // 4. Tomar el centro si está libre
     if (!todosMovs.includes(CENTER_SQUARE)) {
         console.log("Bot toma el centro:", CENTER_SQUARE);
         return CENTER_SQUARE;
     }
 
-    // 6. Bloquear L clásica
+    // 5. Bloquear L clásica (esquinas opuestas)
     const esquinasOpuestas = [
         [1, 9], 
         [3, 7]
     ];
     const humanoTieneL = esquinasOpuestas.some(pair => 
-      movsHumano.includes(pair[0]) && movsHumano.includes(pair[1]));
+        movsHumano.includes(pair[0]) && movsHumano.includes(pair[1]));
     if (humanoTieneL) {
         const lateral = this.calcularLateralAleatorio(todosMovs);
         if (lateral !== null && lateral !== undefined) {
@@ -146,44 +128,33 @@ export class Bot {
         }
     }
 
-    // 7. Bloquear L corta
+    // 6. Bloquear L corta (esquina y lateral)
+    // (Esta lógica se mantiene igual)
     const lateralesAdyacentes = [
-    [2, 4, 1],
-    [2, 6, 3],
-    [4, 8, 7],
-    [6, 8, 9],
-    [2, 3, 1],
-    [4, 1, 7],
-    [6, 3, 9],
-    [8, 9, 7],
-    [2, 9, 3],
-    [4, 9, 7],
-    [6, 1, 3],
-    [8, 1, 7],
-    [4, 3, 1],
-    [8, 3, 9],
-    [6, 7, 9],
-    [2, 7, 1]
-];
-const humanoTieneLCorta = lateralesAdyacentes.find(
-    pair => movsHumano.includes(pair[0]) && movsHumano.includes(pair[1])
-);
-if (humanoTieneLCorta) {
-    const esquinaClave = humanoTieneLCorta[2];
-    if (!todosMovs.includes(esquinaClave)) {
-        console.log("Bot bloquea L corta en esquina:", esquinaClave);
-        return esquinaClave;
+        [2, 4, 1], [2, 6, 3], [4, 8, 7], [6, 8, 9], [2, 3, 1],
+        [4, 1, 7], [6, 3, 9], [8, 9, 7], [2, 9, 3], [4, 9, 7],
+        [6, 1, 3], [8, 1, 7], [4, 3, 1], [8, 3, 9], [6, 7, 9],
+        [2, 7, 1]
+    ];
+    const humanoTieneLCorta = lateralesAdyacentes.find(
+        pair => movsHumano.includes(pair[0]) && movsHumano.includes(pair[1])
+    );
+    if (humanoTieneLCorta) {
+        const esquinaClave = humanoTieneLCorta[2];
+        if (!todosMovs.includes(esquinaClave)) {
+            console.log("Bot bloquea L corta en esquina:", esquinaClave);
+            return esquinaClave;
+        }
     }
-}
 
-    // 8. Tomar una esquina disponible
+    // 7. Tomar una esquina disponible
     const esquina = this.calcularEsquinaAleatoria(todosMovs);
     if (esquina !== null && esquina !== undefined) {
         console.log("Bot toma esquina:", esquina);
         return esquina;
     }
 
-    // 9. Tomar un lateral disponible
+    // 8. Tomar un lateral disponible
     const lateral = this.calcularLateralAleatorio(todosMovs);
     if (lateral !== null && lateral !== undefined) {
         console.log("Bot toma lateral:", lateral);

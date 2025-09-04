@@ -191,7 +191,7 @@ function iniciarJuego() {
         y: 0,
         scale: 1,
         opacity: 1,
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "#F0EFE9",
         duration: 1.5,
         ease: "bounce.out",
         delay: 0.08 * idx
@@ -280,26 +280,49 @@ function responderQuiz(idx, correcta, btnClicked, optionsDiv) {
 }
 
 function colocarFichaHumano() {
-  if (!casillaPendiente) return;
-  const id = parseInt(casillaPendiente.id);
-  casillaPendiente.textContent = 'X';
-  movimientosHumano.push(id);
+    if (!casillaPendiente) return;
+    const id = parseInt(casillaPendiente.id);
+    casillaPendiente.textContent = 'X';
+    movimientosHumano.push(id);
 
-  casillaPendiente.style.backgroundColor = colorPorIndice(id - 1);
+    casillaPendiente.style.backgroundColor = colorPorIndice(id - 1);
+    lanzarParticulas(casillaPendiente, "#000");
 
-  lanzarParticulas(casillaPendiente, "#000"); // O el color que prefieras
+    if (verificarGanador(movimientosHumano)) {
+        // ANTES: setTimeout(() => alert("¡Ganaste! 🎉"), 100); return reiniciarTablero();
+        // AHORA:
+        setTimeout(() => {
+            Swal.fire({
+                title: '¡Felicidades!',
+                text: 'Has ganado la partida.',
+                icon: 'success', // Iconos: 'success', 'error', 'warning', 'info', 'question'
+                confirmButtonText: 'Jugar de nuevo'
+            }).then(() => {
+                // Este código se ejecuta DESPUÉS de que el usuario presiona "Jugar de nuevo"
+                reiniciarTablero();
+            });
+        }, 100);
+        return; // Detenemos la ejecución aquí
+    }
 
-  if (verificarGanador(movimientosHumano)) {
-    setTimeout(() => alert("¡Ganaste! 🎉"), 100);
-    return reiniciarTablero();
-  }
-  if (esEmpate()) {
-    setTimeout(() => alert("¡Empate! 🤝"), 100);
-    return reiniciarTablero();
-  }
+    if (esEmpate()) {
+        // ANTES: setTimeout(() => alert("¡Empate! 🤝"), 100); return reiniciarTablero();
+        // AHORA:
+        setTimeout(() => {
+            Swal.fire({
+                title: '¡Es un empate!',
+                text: 'Nadie ganó esta vez.',
+                icon: 'info',
+                confirmButtonText: 'Jugar de nuevo'
+            }).then(() => {
+                reiniciarTablero();
+            });
+        }, 100);
+        return; // Detenemos la ejecución aquí
+    }
 
-  turno = 'bot';
-  setTimeout(turnoBot, 300);
+    turno = 'bot';
+    setTimeout(turnoBot, 300);
 }
 
 function colocarFichaHumanoAleatoria() {
@@ -316,30 +339,50 @@ function colocarFichaHumanoAleatoria() {
 }
 
 function turnoBot() {
-  const casillaParaJugar = bot.decidirMovimiento(movimientosHumano, movimientosBot);
-  if (!casillaParaJugar) {
-    turno = 'humano';
-    return;
-  }
-  const casillaDOM = document.getElementById(casillaParaJugar);
-  if (casillaDOM && !casillaDOM.textContent) {
-    casillaDOM.textContent = 'O';
-    lanzarParticulas(casillaPendiente, "#000"); // O el color que prefieras
-    movimientosBot.push(casillaParaJugar);
-    casillaDOM.style.backgroundColor = colorPorIndice(casillaParaJugar - 1);
+    const casillaParaJugar = bot.decidirMovimiento(movimientosHumano, movimientosBot);
+    // ... (resto de la lógica del bot para colocar la ficha)
+    
+    const casillaDOM = document.getElementById(casillaParaJugar);
+    if (casillaDOM && !casillaDOM.textContent) {
+        casillaDOM.textContent = 'O';
+        lanzarParticulas(casillaPendiente, "#000"); // O el color que prefieras
+        movimientosBot.push(casillaParaJugar);
+        casillaDOM.style.backgroundColor = colorPorIndice(casillaParaJugar - 1);
+        lanzarParticulas(casillaDOM, "#000");
+    }
 
-    lanzarParticulas(casillaDOM, "#000");
-  }
-  
-  if (verificarGanador(movimientosBot)) {
-    setTimeout(() => alert("Perdiste 😢"), 100);
-    return reiniciarTablero();
-  }
-  if (esEmpate()) {
-    setTimeout(() => alert("¡Empate! 🤝"), 100);
-    return reiniciarTablero();
-  }
-  turno = 'humano';
+    if (verificarGanador(movimientosBot)) {
+        // ANTES: setTimeout(() => alert("Perdiste 😢"), 100); return reiniciarTablero();
+        // AHORA:
+        setTimeout(() => {
+            Swal.fire({
+                title: '¡Oh no!',
+                text: 'El bot ha ganado esta vez.',
+                icon: 'error',
+                confirmButtonText: 'Intentar de nuevo'
+            }).then(() => {
+                reiniciarTablero();
+            });
+        }, 100);
+        return; // Detenemos la ejecución aquí
+    }
+
+    if (esEmpate()) {
+        // ANTES: setTimeout(() => alert("¡Empate! 🤝"), 100); return reiniciarTablero();
+        // AHORA:
+        setTimeout(() => {
+            Swal.fire({
+                title: '¡Es un empate!',
+                text: 'Nadie ganó esta vez.',
+                icon: 'info',
+                confirmButtonText: 'Jugar de nuevo'
+            }).then(() => {
+                reiniciarTablero();
+            });
+        }, 100);
+        return; // Detenemos la ejecución aquí
+    }
+    turno = 'humano';
 }
 
 function verificarGanador(movimientos) {
