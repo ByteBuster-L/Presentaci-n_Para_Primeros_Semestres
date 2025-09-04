@@ -55,33 +55,6 @@ export class Bot {
     return masCercanos.filter(mov => !ambasPosiciones.includes(mov));
   };
 
-  seleccionarBloqueoOGanada({ movimientoParaBloquear, movimientoParaGanar, humano, bot }) {
-    const todos = humano.concat(bot);
-    const estadoHumano = winnerConditional.filter(arrayWin => hasTwoSimilarElements(arrayWin, humano));
-    const estadoBot = winnerConditional.filter(arrayWin => hasTwoSimilarElements(arrayWin, bot));
-    const esquinas = [1, 3, 7, 9];
-    let resultado = movimientoParaGanar;
-    if (estadoBot[0] && movimientoParaGanar[0]) {
-      resultado = movimientoParaGanar;
-    } else if (estadoHumano[0] && movimientoParaBloquear[0]) {
-      resultado = movimientoParaBloquear;
-    }
-
-    const excepcionGanada = [...winnerConditional].splice(6, 9);
-    const excepcionHumano = excepcionGanada.filter(array => hasTwoSimilarElements(array, humano));
-
-    if (hasTwoSimilarElements(esquinas, humano)
-      && (!estadoBot[0])
-      && this.difficulty == GAME_MODE.impossible
-      && excepcionHumano[0]) {
-      resultado = movimientoParaGanar;
-    } else if ((!estadoHumano[0] && !estadoBot[0]
-      && this.difficulty == GAME_MODE.impossible)) {
-      resultado = [this.calcularEsquinaAleatoria(todos)];
-    }
-    return movimientoParaGanar[0] ? resultado : movimientoParaBloquear;
-  };
-
   seleccionarEsquina(arreglo) {
     const esquinasYCentro = [1, 3, 7, 9, 5];
     const esquinaFiltrada = esquinasYCentro.filter(el => arreglo.includes(el))[0];
