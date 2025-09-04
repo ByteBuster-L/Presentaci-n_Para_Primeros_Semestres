@@ -148,21 +148,33 @@ export class Bot {
 
     // 7. Bloquear L corta
     const lateralesAdyacentes = [
-        [2, 4, 1],
-        [2, 6, 3],
-        [4, 8, 7],
-        [6, 8, 9]
-    ];
-    const humanoTieneLCorta = lateralesAdyacentes.find(
-        pair => movsHumano.includes(pair[0]) && movsHumano.includes(pair[1])
-    );
-    if (humanoTieneLCorta) {
-        const esquinaClave = humanoTieneLCorta[2];
-        if (!todosMovs.includes(esquinaClave)) {
-            console.log("Bot bloquea L corta en esquina:", esquinaClave);
-            return esquinaClave;
-        }
+    [2, 4, 1],
+    [2, 6, 3],
+    [4, 8, 7],
+    [6, 8, 9],
+    [2, 3, 1],
+    [4, 1, 7],
+    [6, 3, 9],
+    [8, 9, 7],
+    [2, 9, 3],
+    [4, 9, 7],
+    [6, 1, 3],
+    [8, 1, 7],
+    [4, 3, 1],
+    [8, 3, 9],
+    [6, 7, 9],
+    [2, 7, 1]
+];
+const humanoTieneLCorta = lateralesAdyacentes.find(
+    pair => movsHumano.includes(pair[0]) && movsHumano.includes(pair[1])
+);
+if (humanoTieneLCorta) {
+    const esquinaClave = humanoTieneLCorta[2];
+    if (!todosMovs.includes(esquinaClave)) {
+        console.log("Bot bloquea L corta en esquina:", esquinaClave);
+        return esquinaClave;
     }
+}
 
     // 8. Tomar una esquina disponible
     const esquina = this.calcularEsquinaAleatoria(todosMovs);
