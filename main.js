@@ -191,7 +191,7 @@ function iniciarJuego() {
         y: 0,
         scale: 1,
         opacity: 1,
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "#F0EFE9",
         duration: 1.5,
         ease: "bounce.out",
         delay: 0.08 * idx
