@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (currentScroll > lastScrollTop) {
             document.querySelector('.navs').style.top = "-170px";
-            gsap.from("navegacion", {
+            gsap.from(".navegacion", {
                 
             })
         } else {
